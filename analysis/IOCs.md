@@ -1,4 +1,4 @@
-# Indicators of Compromise — WordPress XMRig Cryptojacking
+# Indicators of Compromise: WordPress XMRig Cryptojacking
 
 Attacker indicators are published for threat-intelligence value and **defanged**
 (`[.]`, `hxxp`). Victim data is intentionally omitted. Refang before use in tooling.
@@ -54,7 +54,7 @@ parent:     apache2 / php-fpm     (spawned by PHP, not cron/systemd)
 `T1105` Ingress Tool Transfer · `T1496` Resource Hijacking ·
 `T1071.001` Application Layer Protocol: Web Protocols
 
-## YARA — PHP loader/shell
+## YARA: PHP loader and shell
 
 ```yara
 rule WP_XMRig_Loader_Webshell
@@ -80,7 +80,7 @@ rule WP_XMRig_Loader_Webshell
 }
 ```
 
-## YARA — the miner (generic XMRig)
+## YARA: the miner (generic XMRig)
 
 ```yara
 rule XMRig_Miner_Generic
