@@ -1,0 +1,32 @@
+title: "WordPress → XMRig Cryptojacking"
+description: "A technical incident-response case study, with reverse-engineering and a fully reproducible, internet-isolated lab."
+lang: en
+
+# Render every markdown page through our Mermaid-enabled layout.
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+# GitHub Pages enables jekyll-relative-links + jekyll-optional-front-matter by
+# default, so .md cross-links resolve to .html and front-matter-less files build.
+plugins:
+  - jekyll-relative-links
+  - jekyll-optional-front-matter
+
+# Keep victim data, internal planning notes, real malware payloads, and lab
+# runtime state OUT of the published site. (They may still live in the repo;
+# scrub the repo separately before making it public — see README.)
+exclude:
+  - incident-2026-07-14/
+  - docs/
+  - academy-wp-lab/wordpress_data/
+  - academy-wp-lab/payloads/
+  - .playwright-mcp/
+  - _site/
+  - .jekyll-cache/
+  - Gemfile
+  - Gemfile.lock
+  - vendor/
+  - README.md.bak

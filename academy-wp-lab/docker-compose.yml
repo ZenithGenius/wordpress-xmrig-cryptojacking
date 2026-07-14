@@ -1,0 +1,88 @@
+name: academy-wp-lab
+
+networks:
+  labnet:
+    internal: true   # SAFETY: no route off the host. Real XMRig can only reach lab-pool.
+  edge: {}           # normal bridge — ONLY the inbound proxy sits here, never wordpress.
+
+services:
+  db:
+    image: mariadb:10.11
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wp
+      MARIADB_PASSWORD: wp_lab_pw
+      MARIADB_ROOT_PASSWORD: root_lab_pw
+    networks: [labnet]
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  wordpress:
+    build: ./wordpress
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: wp_lab_pw
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_CONFIG_EXTRA: |
+        define('FS_METHOD', 'direct');
+    volumes:
+      - ./wordpress_data:/var/www/html
+    networks: [labnet]     # labnet ONLY — no internet route, so a spawned miner can't egress.
+
+  # Inbound-only reverse forward so the host browser can reach WordPress without
+  # putting the (miner-hosting) wordpress container on an internet-capable network.
+  # ponytail: raw TCP forward, single-user lab; not a forward proxy the miner could abuse.
+  edge:
+    image: alpine/socat
+    command: TCP-LISTEN:80,fork,reuseaddr TCP:wordpress:80
+    depends_on:
+      wordpress:
+        condition: service_started
+    ports:
+      - "127.0.0.1:${WP_PORT}:80"
+    networks: [edge, labnet]
+
+  wpsetup:
+    image: wordpress:cli
+    user: "33:33"                 # match apache www-data uid on the shared volume
+    depends_on:
+      db:
+        condition: service_healthy
+      wordpress:
+        condition: service_started
+    environment:
+      LAB_MODE: ${LAB_MODE}
+      WP_PORT: ${WP_PORT}
+      HOME: /tmp
+      # wp-config reads these at runtime via getenv_docker(); without them
+      # wp-cli falls back to the literal default host 'mysql' and can't connect.
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: wp_lab_pw
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./wordpress_data:/var/www/html
+      - ./payloads:/payloads:ro
+      - ./setup/wp-init.sh:/wp-init.sh:ro
+    entrypoint: ["sh", "/wp-init.sh"]
+    # labnet for db; edge for one-time plugin download in exploit mode. This
+    # one-shot installer exits after setup — the miner-hosting wordpress
+    # container is never on edge, so miner isolation is unaffected.
+    networks: [labnet, edge]
+
+  lab-cdn:
+    build: ./cdn
+    networks: [labnet]
+
+  lab-pool:
+    build: ./pool
+    networks:
+      labnet:
+        aliases: [lab-pool.internal]   # so the dropper's default pool name resolves

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ page.description | default: site.description }}">
+  <style>
+    :root {
+      --bg: #ffffff; --fg: #1f2328; --muted: #656d76; --border: #d0d7de;
+      --link: #0969da; --code-bg: #f6f8fa; --accent: #cf222e; --table-alt: #f6f8fa;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117; --fg: #e6edf3; --muted: #8b949e; --border: #30363d;
+        --link: #4493f8; --code-bg: #161b22; --accent: #ff7b72; --table-alt: #161b22;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--fg);
+      font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.25rem 5rem; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 2rem 0 1rem; }
+    h1 { font-size: 2rem; border-bottom: 1px solid var(--border); padding-bottom: .4rem; }
+    h2 { font-size: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: .3rem; }
+    h3 { font-size: 1.2rem; }
+    p, li { color: var(--fg); }
+    blockquote {
+      margin: 1rem 0; padding: .4rem 1rem; color: var(--muted);
+      border-left: 4px solid var(--border); background: var(--code-bg);
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      font-size: .88em; background: var(--code-bg); padding: .15em .35em; border-radius: 6px;
+    }
+    pre {
+      background: var(--code-bg); padding: 1rem; border-radius: 8px;
+      overflow-x: auto; border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; }
+    img { max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: 8px; }
+    table { border-collapse: collapse; width: 100%; margin: 1rem 0; display: block; overflow-x: auto; }
+    th, td { border: 1px solid var(--border); padding: .5rem .7rem; text-align: left; }
+    tr:nth-child(even) { background: var(--table-alt); }
+    hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .mermaid { background: var(--bg); text-align: center; margin: 1.5rem 0; }
+    .site-nav { font-size: .9rem; color: var(--muted); margin-bottom: 2rem; }
+    .site-foot { margin-top: 4rem; padding-top: 1rem; border-top: 1px solid var(--border);
+                 color: var(--muted); font-size: .85rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="site-nav">
+      <a href="{{ '/' | relative_url }}">Home</a> ·
+      <a href="{{ '/analysis/xmrig-wordpress-cryptojacking.html' | relative_url }}">Analysis</a> ·
+      <a href="{{ '/analysis/IOCs.html' | relative_url }}">IOCs</a>
+    </nav>
+
+    {{ content }}
+
+    <footer class="site-foot">
+      {{ site.title }} — for educational and defensive use only.
+    </footer>
+  </div>
+
+  <!-- Mermaid: vendored locally (no external CDN) to convert fenced ```mermaid blocks into diagrams -->
+  <script src="{{ '/assets/mermaid.min.js' | relative_url }}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('code.language-mermaid, .language-mermaid').forEach(function (el) {
+        var host = el.closest('.language-mermaid') || el;
+        var div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = el.textContent;
+        host.replaceWith(div);
+      });
+      var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      mermaid.initialize({ startOnLoad: false, securityLevel: 'loose',
+                           theme: dark ? 'dark' : 'default' });
+      mermaid.run({ querySelector: '.mermaid' });
+    });
+  </script>
+</body>
+</html>
