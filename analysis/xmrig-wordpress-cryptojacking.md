@@ -2,7 +2,7 @@
 
 A forensic incident-response case study: how a cryptojacked WordPress server was investigated, what reverse-engineering the sample revealed, and a lab that recreates the whole attack safely.
 
-*Isaac Joumessi · 14 July 2026 · Incident Response and Malware Analysis*
+*Isaac Joumessi · 14 July 2026 · Incident Response / Malware Analysis*
 
 > **Ethics and scope.** This analysis was performed on a system I was authorized to investigate. The affected party is anonymized throughout: client name, real domain, host paths, usernames, and IP are redacted. Attacker indicators (wallet, pool, delivery URL, sample hash) are published for community threat-intelligence value and are defanged. A safe, isolated lab that reproduces the entire chain accompanies this report; see [Reproducible lab](#7-reproducible-lab).
 

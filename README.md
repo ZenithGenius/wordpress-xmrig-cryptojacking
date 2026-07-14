@@ -8,7 +8,7 @@ A technical incident-response case study of a WordPress server compromised for M
 
 ## Read the writeup
 
-[Full technical analysis](./analysis/xmrig-wordpress-cryptojacking.md) covers the attack chain, artifact-by-artifact analysis, XMRig static analysis, root cause, and detection and hardening.
+**[📖 Read online](https://zenithgenius.github.io/wordpress-xmrig-cryptojacking/analysis/xmrig-wordpress-cryptojacking.html)** (if GitHub Pages is enabled) | [Full technical analysis](./analysis/xmrig-wordpress-cryptojacking.md) covers the attack chain, artifact-by-artifact analysis, XMRig static analysis, root cause, and detection and hardening.
 
 - [Indicators of compromise and YARA rules](./analysis/IOCs.md)
 
