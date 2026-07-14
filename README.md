@@ -63,13 +63,11 @@ _layouts/ assets/ _config.yml   GitHub Pages (Jekyll with vendored Mermaid and f
 
 > Raw forensic artifacts and internal design notes are kept private (gitignored, not published) because they contain victim-identifying data.
 
-## GitHub Pages
-
-This repository is a Jekyll site. Enable Settings, then Pages, then Deploy from branch, `main` and root. The writeup then publishes with rendered diagrams and screenshots at:
+## Note
 
 **https://zenithgenius.github.io/wordpress-xmrig-cryptojacking/analysis/xmrig-wordpress-cryptojacking.html**
 
-The site build excludes the private `incident-2026-07-14/` and `docs/` directories. The writeup also renders in full, Mermaid included, directly on GitHub without Pages.
+The site build excludes the private `incident-2026-07-14/` and `docs/` directories.
 
 ## Credits
 
